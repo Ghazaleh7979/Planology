@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.LoginUser
+﻿namespace Application.Requests.Login
 {
-    public class LoginUserCommand
+    public class LoginUserRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }

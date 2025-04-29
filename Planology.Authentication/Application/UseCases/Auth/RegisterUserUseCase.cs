@@ -1,18 +1,19 @@
 ﻿using Application.DTOs;
+using Application.Requests.Login;
 using Application.ServiceInterfaces;
 
-namespace Application.UseCases.RegisterUser
+namespace Application.UseCases.Login
 {
-    public class RegisterUserHandler
+    public class RegisterUserUseCase
     {
         private readonly IAuthService _authService;
 
-        public RegisterUserHandler(IAuthService authService)
+        public RegisterUserUseCase(IAuthService authService)
         {
             _authService = authService;
         }
 
-        public async Task<TokenDto> Handle(RegisterUserCommand command)
+        public async Task<TokenDto> Handle(RegisterUserRequest command)
         {
             return await _authService.RegisterAsync(command);
         }

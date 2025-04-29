@@ -1,18 +1,19 @@
 ﻿using Application.DTOs;
+using Application.Requests.Login;
 using Application.ServiceInterfaces;
 
-namespace Application.UseCases.RefreshToken
+namespace Application.UseCases.Login
 {
-    public class RefreshTokenHandler
+    public class RefreshTokenUseCase
     {
         private readonly IAuthService _authService;
 
-        public RefreshTokenHandler(IAuthService authService)
+        public RefreshTokenUseCase(IAuthService authService)
         {
             _authService = authService;
         }
 
-        public async Task<TokenDto> Handle(RefreshTokenCommand command)
+        public async Task<TokenDto> Handle(RefreshTokenRequest command)
         {
             return await _authService.RefreshTokenAsync(command);
         }
