@@ -7,7 +7,7 @@ namespace Domain.IRepository
         Task<RefreshToken> GetByTokenAsync(string token);
         Task<bool> IsValidAsync(string token); // optional
         Task AddAsync(RefreshToken refreshToken);
-        Task DeleteAsync(RefreshToken refreshToken);
+        void Delete(RefreshToken refreshToken);
         Task DeleteAllForUserAsync(Guid userId); // optional
 
     }

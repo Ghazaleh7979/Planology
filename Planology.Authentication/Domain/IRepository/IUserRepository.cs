@@ -9,7 +9,7 @@ namespace Domain.IRepository
         Task<User> GetByUsernameAsync(string username); // optional
         Task<bool> ExistsByEmailAsync(string email);
         Task AddAsync(User user);
-        Task UpdateAsync(User user);
+        void Update(User user);
 
     }
 }
