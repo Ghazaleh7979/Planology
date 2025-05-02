@@ -11,7 +11,7 @@ namespace Application.UseCases.ACL
             _aceRepository = aceRepository;
         }
 
-        public async Task<bool> ExecuteAsync(Guid userId, string resourceType, Guid resourceId, PermissionEnum permission)
+        public async Task<bool> ExecuteAsync(Guid userId, Guid resourceId, PermissionEnum permission)
         {
             var permissions = await _aceRepository.GetPermissionsAsync(userId, resourceId);
             return permissions.Any(p => p.Permission == permission);
