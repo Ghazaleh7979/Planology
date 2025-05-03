@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.IRepository;
 using Infrastructure.Databace;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
@@ -14,7 +15,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<UserEntity> GetByIdAsync(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -22,7 +23,7 @@ namespace Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<UserEntity> GetByEmailAsync(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
             if (user == null)
@@ -30,7 +31,7 @@ namespace Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User> GetByUsernameAsync(string username)
+        public async Task<UserEntity> GetByUsernameAsync(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
@@ -43,14 +44,23 @@ namespace Infrastructure.Repositories
             return await _context.Users.AnyAsync(u => u.Email.Value == email);
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(UserEntity user)
         {
             await _context.Users.AddAsync(user);
         }
+        public string HashPassword(string password)
+        {
+            return PasswordHasher.HashPassword(password);
+        }
 
-        public void Update(User user)
+        public void Update(UserEntity user)
         {
             _context.Users.Update(user);
+        }
+
+        public void Delete(UserEntity user)
+        {
+            _context.Users.Remove(user);
         }
     }
 }

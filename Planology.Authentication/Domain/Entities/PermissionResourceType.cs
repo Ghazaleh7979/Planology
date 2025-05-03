@@ -1,8 +1,7 @@
 ﻿namespace Domain.Entities
 {
-    public class PermissionResourceType
+    public class PermissionResourceType : BaseEntity
     {
-        public Guid Id { get; private set; }
         public string Name { get; private set; }
     }
 }

@@ -5,7 +5,7 @@ namespace Infrastructure.Databace
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
         public DbSet<PermissionResourceType> PermissionResourceTypes { get; set; }
         public DbSet<AccessControlEntry> AccessControlEntries { get; set; }
         public DbSet<JwtSettings> JwtSettings { get; set; }

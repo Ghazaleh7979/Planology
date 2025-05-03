@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class JwtSettings
+    public class JwtSettings : BaseEntity
     {
         public string SecretKey { get; set; }
         public string Issuer { get; set; }

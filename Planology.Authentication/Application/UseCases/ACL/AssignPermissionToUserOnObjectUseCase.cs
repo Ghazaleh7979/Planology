@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Requests.ACL;
+using Domain.Entities;
 using Domain.IRepository;
 
 namespace Application.UseCases.ACL
@@ -12,9 +13,9 @@ namespace Application.UseCases.ACL
             _aceRepository = aceRepository;
         }
 
-        public async Task ExecuteAsync(Guid userId, Guid permissionResourceTypeId, PermissionEnum permission)
+        public async Task ExecuteAsync(AssignPermissionRequest request)
         {
-            var entry = new AccessControlEntry(userId, permissionResourceTypeId, permission);
+            var entry = new AccessControlEntry(request.UserId, request.PermissionResourceTypeId, request.Permission);
             await _aceRepository.AddAsync(entry);
         }
     }
