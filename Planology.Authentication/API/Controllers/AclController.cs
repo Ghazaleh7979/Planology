@@ -1,6 +1,5 @@
-﻿using Application.Requests.Login;
+﻿using Application.Requests.ACL;
 using Application.UseCases.ACL;
-using Application.UseCases.Login;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -11,7 +10,6 @@ namespace API.Controllers
     {
         private readonly CheckUserHasPermissionOnObjectUseCase _checkUserHasPermissionOnObjectUseCase;
         private readonly AssignPermissionToUserOnObjectUseCase _assignPermissionToUserOnObjectUseCase;
-        private readonly LoginUserUseCase _loginUserHandler;
 
         public ACLController(
             CheckUserHasPermissionOnObjectUseCase checkUserHasPermissionOnObjectUseCase,
@@ -22,17 +20,17 @@ namespace API.Controllers
         }
 
         [HttpPost("CheckUserHasPermission")]
-        public async Task<IActionResult> CheckUserHasPermission(RegisterUserRequest request)
+        public async Task<IActionResult> CheckUserHasPermission(CheckPermissionRequest request)
         {
             var result = await _checkUserHasPermissionOnObjectUseCase.ExecuteAsync(request);
             return Ok(result);
         }
 
         [HttpPost("AssignPermissionToUser")]
-        public async Task<IActionResult> AssignPermissionToUser(LoginUserRequest request)
+        public async Task<IActionResult> AssignPermissionToUser(AssignPermissionRequest request)
         {
-            var result = await _assignPermissionToUserOnObjectUseCase.ExecuteAsync(request);
-            return Ok(result);
+            await _assignPermissionToUserOnObjectUseCase.ExecuteAsync(request);
+            return Ok();
         }
 
     }

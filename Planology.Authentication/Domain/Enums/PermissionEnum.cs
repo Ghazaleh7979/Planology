@@ -2,8 +2,9 @@
 {
     public enum PermissionEnum
     {
-        BookPlanner,
-        DailyPlanner,
-        FoodPlanner
+        Add,
+        Edit,
+        Get,
+        Delete
     }
 }

@@ -4,12 +4,13 @@ namespace Domain.IRepository
 {
     public interface IUserRepository
     {
-        Task<User> GetByIdAsync(Guid id);
-        Task<User> GetByEmailAsync(string email);
-        Task<User> GetByUsernameAsync(string username); // optional
+        Task<UserEntity> GetByIdAsync(Guid id);
+        Task<UserEntity> GetByEmailAsync(string email);
+        Task<UserEntity> GetByUsernameAsync(string username); // optional
         Task<bool> ExistsByEmailAsync(string email);
-        Task AddAsync(User user);
-        void Update(User user);
-
+        Task AddAsync(UserEntity user);
+        void Update(UserEntity user);
+        void Delete(UserEntity user)
+        string HashPassword(string password);
     }
 }

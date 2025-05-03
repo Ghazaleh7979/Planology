@@ -1,4 +1,5 @@
-﻿using Domain.IRepository;
+﻿using Application.Requests.ACL;
+using Domain.IRepository;
 
 namespace Application.UseCases.ACL
 {
@@ -11,10 +12,10 @@ namespace Application.UseCases.ACL
             _aceRepository = aceRepository;
         }
 
-        public async Task<bool> ExecuteAsync(Guid userId, Guid resourceId, PermissionEnum permission)
+        public async Task<bool> ExecuteAsync(CheckPermissionRequest request)
         {
-            var permissions = await _aceRepository.GetPermissionsAsync(userId, resourceId);
-            return permissions.Any(p => p.Permission == permission);
+            var permissions = await _aceRepository.GetPermissionsAsync(request.UserId, request.PermissionResourceTypeId);
+            return permissions.Any(p => p.Permission == request.Permission);
         }
     }
 
