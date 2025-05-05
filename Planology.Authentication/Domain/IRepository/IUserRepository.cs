@@ -10,7 +10,7 @@ namespace Domain.IRepository
         Task<bool> ExistsByEmailAsync(string email);
         Task AddAsync(UserEntity user);
         void Update(UserEntity user);
-        void Delete(UserEntity user)
+        void Delete(UserEntity user);
         string HashPassword(string password);
     }
 }
