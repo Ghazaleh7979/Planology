@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.UseCases.Auth
+﻿namespace Application.UseCases.Auth
 {
-    internal class ChangePasswordUseCase
+    public class ChangePasswordUseCase
     {
     }
 }

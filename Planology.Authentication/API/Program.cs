@@ -1,5 +1,15 @@
+using Application.ServiceInterfaces;
+using Application.UseCases.ACL;
+using Application.UseCases.Auth;
+using Application.UseCases.Login;
+using Application.UseCases.User;
 using Domain.Entities;
+using Domain.IRepository;
+using Infrastructure.Database;
+using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -7,7 +17,49 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        });
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+    ));
+
+#region Repositories
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAccessControlEntryRepository, AccessControlEntryRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+#endregion
+
+#region UseCases
+
+builder.Services.AddScoped<AssignPermissionToUserOnObjectUseCase>();
+builder.Services.AddScoped<CheckUserHasPermissionOnObjectUseCase>();
+
+builder.Services.AddScoped<RegisterUserUseCase>();
+builder.Services.AddScoped<RefreshTokenUseCase>();
+builder.Services.AddScoped<LoginUserUseCase>();
+builder.Services.AddScoped<ChangePasswordUseCase>();
+
+builder.Services.AddScoped<CreateUserUseCase>();
+builder.Services.AddScoped<UpdateUserUseCase>();
+builder.Services.AddScoped<GetUserByIdUseCase>();
+//builder.Services.AddScoped<GetAllUsersUseCase>();
+builder.Services.AddScoped<DeleteUserUseCase>();
+
+#endregion
+builder.Services.AddScoped<PasswordHasher>();
+builder.Services.AddScoped<JwtSettings>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddOpenApi();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.AddAuthentication(options =>

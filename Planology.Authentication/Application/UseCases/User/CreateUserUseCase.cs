@@ -19,7 +19,7 @@ namespace Application.UseCases.User
         public async Task<UserDto> ExecuteAsync(UserDto input)
         {
             var passwordHash = _userRepository.HashPassword(input.Password);
-            UserEntity user = new(input.Username, input.MobileNumber, passwordHash, input.Role);
+            UserEntity user = new(input.Username, input.MobileNumber, passwordHash, input.Role, input.Email.Value);
 
             await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();

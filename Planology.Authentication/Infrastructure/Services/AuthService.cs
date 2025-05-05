@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Requests.Login;
 using Application.ServiceInterfaces;
+using Domain.ValueObjects;
 
 namespace Infrastructure.Services
 {
@@ -8,7 +9,7 @@ namespace Infrastructure.Services
     {
         private readonly ITokenService _tokenService;
 
-        private static List<UserDto> _users = new();
+        private static List<UserLoginDto> _users = new();
 
         public AuthService(ITokenService tokenService)
         {
@@ -18,21 +19,16 @@ namespace Infrastructure.Services
         public async Task<TokenDto> RegisterAsync(RegisterUserRequest command)
         {
             var hashedPassword = PasswordHasher.HashPassword(command.Password);
-            var user = new UserDto
-            {
-                UserId = Guid.NewGuid(),
-                Email = command.Email,
-                Password = hashedPassword,
-                FullName = command.FullName
-            };
+            var user = new UserLoginDto(new Email(command.Email), command.Password);
             _users.Add(user);
 
             return await Task.FromResult(_tokenService.GenerateToken(user));
+
         }
 
         public async Task<TokenDto> LoginAsync(LoginUserRequest command)
         {
-            var user = _users.FirstOrDefault(u => u.Email == command.Email);
+            var user = _users.FirstOrDefault(u => u.Email == new Email(command.Email));
 
             if (user == null || !PasswordHasher.VerifyPassword(user.Password, command.Password))
             {

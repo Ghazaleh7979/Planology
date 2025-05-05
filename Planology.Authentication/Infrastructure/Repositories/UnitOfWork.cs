@@ -1,5 +1,5 @@
 ﻿using Domain.IRepository;
-using Infrastructure.Databace;
+using Infrastructure.Database;
 
 namespace Infrastructure.Repositories
 {

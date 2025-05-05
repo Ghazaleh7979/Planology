@@ -5,6 +5,7 @@
         public Guid UserId { get; private set; }
         public string Token { get; private set; }
         public DateTime ExpiryDate { get; private set; }
+        public UserEntity? User { get; private set; }
 
         private RefreshToken() { }
 
