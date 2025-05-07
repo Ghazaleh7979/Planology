@@ -1,9 +1,8 @@
-﻿using Domain.ValueObjects;
-
+﻿
 namespace Application.DTOs
 {
     public record UserLoginDto(
-        Email? Email,
+        string Email,
         string Password
     );
 }

@@ -1,14 +1,13 @@
 ﻿using Domain.Entities;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
-        public DbSet<UserEntity> Users { get; set; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<PermissionResourceType> PermissionResourceTypes { get; set; }
         public DbSet<AccessControlEntry> AccessControlEntries { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -22,29 +21,21 @@ namespace Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserEntity>(entity =>
+            modelBuilder.Entity<ApplicationUser>(entity =>
             {
-                entity.HasKey(u => u.Id);
-                entity.Property(u => u.Username).IsRequired().HasMaxLength(100);
-                entity.Property(u => u.MobileNumber).IsRequired().HasMaxLength(20);
-                entity.Property(u => u.PasswordHash).IsRequired();
-                entity.HasMany(u => u.AccessControlEntries)
-                      .WithOne(ace => ace.User)
-                      .HasForeignKey(ace => ace.UserId);
-                entity.HasMany(u => u.RefreshTokens)
-                      .WithOne(rt => rt.User)
-                      .HasForeignKey(rt => rt.UserId);
-                entity.Property(e => e.CreateDate).HasDefaultValueSql("GETUTCDATE()");
-                entity.Property(e => e.UpdateDate).ValueGeneratedOnUpdate();
-            });
+                entity.Property(u => u.Role)
+                      .HasConversion<string>();
 
-            modelBuilder.Entity<UserEntity>()
-                .OwnsOne(u => u.Email, email =>
-                {
-                    email.Property(e => e.Value)
-                         .HasColumnName("Email")
-                         .IsRequired();
-                });
+                entity.HasMany(u => u.AccessControlEntries)
+                      .WithOne()
+                      .HasForeignKey(ace => ace.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(u => u.RefreshTokens)
+                      .WithOne()
+                      .HasForeignKey(rt => rt.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<PermissionResourceType>(entity =>
             {

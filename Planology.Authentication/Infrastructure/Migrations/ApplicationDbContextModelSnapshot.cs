@@ -55,7 +55,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AccessControlEntries");
+                    b.ToTable("AccessControlEntries", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PermissionResourceType", b =>
@@ -83,7 +83,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionResourceTypes");
+                    b.ToTable("PermissionResourceTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -118,7 +118,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
@@ -158,7 +158,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AccessControlEntry", b =>
@@ -205,7 +205,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserEntityId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserEntityId");
