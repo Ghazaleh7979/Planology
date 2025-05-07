@@ -1,4 +1,3 @@
-using Application.ServiceInterfaces;
 using Application.UseCases.ACL;
 using Application.UseCases.Auth;
 using Application.UseCases.Login;
@@ -6,9 +5,10 @@ using Application.UseCases.User;
 using Domain.Entities;
 using Domain.IRepository;
 using Infrastructure.Database;
+using Infrastructure.Identity;
 using Infrastructure.Repositories;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,6 +29,15 @@ options.UseSqlServer(
         sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
     ));
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+});
 #region Repositories
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -55,10 +64,7 @@ builder.Services.AddScoped<GetUserByIdUseCase>();
 builder.Services.AddScoped<DeleteUserUseCase>();
 
 #endregion
-builder.Services.AddScoped<PasswordHasher>();
 builder.Services.AddScoped<JwtSettings>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddOpenApi();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
