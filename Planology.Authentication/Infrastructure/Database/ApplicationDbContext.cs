@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,14 +6,16 @@ namespace Infrastructure.Database
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
         public DbSet<PermissionResourceType> PermissionResourceTypes { get; set; }
         public DbSet<AccessControlEntry> AccessControlEntries { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=MyDatabase;Integrated Security=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=Planology;Integrated Security=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

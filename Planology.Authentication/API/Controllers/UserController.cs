@@ -1,24 +1,26 @@
 ﻿using Application.DTOs;
 using Application.UseCases.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class UserController(
         GetUserByIdUseCase getUserById,
-        CreateUserUseCase createUser,
+        GetAllUserUseCase getAllUser,
         UpdateUserUseCase updateUser,
         DeleteUserUseCase deleteUser) : ControllerBase
     {
         private readonly GetUserByIdUseCase _getUserById = getUserById;
-        private readonly CreateUserUseCase _createUser = createUser;
+        private readonly GetAllUserUseCase _getAllUser = getAllUser;
         private readonly UpdateUserUseCase _updateUser = updateUser;
         private readonly DeleteUserUseCase _deleteUser = deleteUser;
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _getUserById.ExecuteAsync(id);
             if (user == null)
@@ -27,15 +29,15 @@ namespace API.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser()
         {
-            var createdUser = await _createUser.ExecuteAsync(userDto);
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId }, createdUser);
+            var allUser = await _getAllUser.ExecuteAsync();
+            return Ok(allUser);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto userDto)
         {
             var result = await _updateUser.ExecuteAsync(id, userDto);
             if (!result)
@@ -45,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _deleteUser.ExecuteAsync(id);
             if (!result)

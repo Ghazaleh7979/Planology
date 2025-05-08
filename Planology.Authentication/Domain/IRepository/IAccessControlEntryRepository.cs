@@ -5,9 +5,9 @@ namespace Domain.IRepository
 {
     public interface IAccessControlEntryRepository
     {
-        Task<List<AccessControlEntry>> GetPermissionsAsync(Guid userId, Guid permissionResourceTypeId);
+        Task<List<AccessControlEntry>> GetPermissionsAsync(string userId, Guid permissionResourceTypeId);
         Task AddAsync(AccessControlEntry entry);
-        Task RemoveAsync(Guid userId, Guid permissionResourceTypeId, PermissionEnum permission);
-        Task<bool> HasPermissionAsync(Guid userId, Guid resourceId, PermissionEnum permission);
+        Task RemoveAsync(string userId, Guid permissionResourceTypeId, PermissionEnum permission);
+        Task<bool> HasPermissionAsync(string userId, Guid resourceId, PermissionEnum permission);
     }
 }

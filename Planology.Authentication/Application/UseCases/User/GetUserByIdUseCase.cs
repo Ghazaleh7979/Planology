@@ -13,12 +13,12 @@ namespace Application.UseCases.User
             _userRepository = userRepository;
         }
 
-        public async Task<UserDto?> ExecuteAsync(Guid userId)
+        public async Task<UserDto?> ExecuteAsync(string userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 return null;
-            return user.MapToUserDto();
+            return user.ToDto();
         }
     }
 
