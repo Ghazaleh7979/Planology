@@ -38,7 +38,7 @@ namespace Infrastructure.Repositories
             _context.RefreshTokens.Remove(refreshToken);
         }
 
-        public async Task DeleteAllForUserAsync(Guid userId)
+        public async Task DeleteAllForUserAsync(string userId)
         {
             var tokens = await _context.RefreshTokens.Where(r => r.UserId == userId).ToListAsync();
             _context.RefreshTokens.RemoveRange(tokens);

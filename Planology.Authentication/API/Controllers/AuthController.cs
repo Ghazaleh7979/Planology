@@ -1,5 +1,5 @@
 ﻿using Application.DTOs;
-using Infrastructure.Identity;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +26,24 @@ namespace API.Controllers
             _signInManager = signInManager;
             _configuration = configuration;
         }
+
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterDto registerDto)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = registerDto.Email,
+                Email = registerDto.Email
+            };
+            user.SetRole(Domain.Enums.RoleEnum.admin);
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok(new { Message = "User registered successfully" });
+        }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
@@ -34,16 +52,12 @@ namespace API.Controllers
                 UserName = registerDto.Email,
                 Email = registerDto.Email
             };
-
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
-
-            await _userManager.AddToRoleAsync(user, "User");
-
             return Ok(new { Message = "User registered successfully" });
         }
         [HttpPost("login")]
@@ -77,7 +91,6 @@ namespace API.Controllers
                 }
             });
         }
-
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -97,13 +110,13 @@ namespace API.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Jwt:ExpireDays"]));
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtSettings:ExpireDays"]));
 
             var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
+                _configuration["JwtSettings:Issuer"],
+                _configuration["JwtSettings:Audience"],
                 claims,
                 expires: expires,
                 signingCredentials: creds

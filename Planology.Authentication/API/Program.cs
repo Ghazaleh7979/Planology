@@ -1,11 +1,8 @@
 using Application.UseCases.ACL;
-using Application.UseCases.Auth;
-using Application.UseCases.Login;
 using Application.UseCases.User;
 using Domain.Entities;
 using Domain.IRepository;
 using Infrastructure.Database;
-using Infrastructure.Identity;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +25,6 @@ options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
     ));
-
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -52,15 +48,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AssignPermissionToUserOnObjectUseCase>();
 builder.Services.AddScoped<CheckUserHasPermissionOnObjectUseCase>();
 
-builder.Services.AddScoped<RegisterUserUseCase>();
-builder.Services.AddScoped<RefreshTokenUseCase>();
-builder.Services.AddScoped<LoginUserUseCase>();
-builder.Services.AddScoped<ChangePasswordUseCase>();
-
-builder.Services.AddScoped<CreateUserUseCase>();
+builder.Services.AddScoped<GetAllUserUseCase>();
 builder.Services.AddScoped<UpdateUserUseCase>();
 builder.Services.AddScoped<GetUserByIdUseCase>();
-//builder.Services.AddScoped<GetAllUsersUseCase>();
 builder.Services.AddScoped<DeleteUserUseCase>();
 
 #endregion

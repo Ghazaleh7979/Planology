@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<AccessControlEntry>> GetPermissionsAsync(Guid userId, Guid permissionResourceTypeId)
+        public async Task<List<AccessControlEntry>> GetPermissionsAsync(string userId, Guid permissionResourceTypeId)
         {
             return await _context.AccessControlEntries
                 .Where(ace => ace.UserId == userId &&
@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
             await _context.AccessControlEntries.AddAsync(entry);
         }
 
-        public async Task RemoveAsync(Guid userId, Guid permissionResourceTypeId, PermissionEnum permission)
+        public async Task RemoveAsync(string userId, Guid permissionResourceTypeId, PermissionEnum permission)
         {
             var entry = await _context.AccessControlEntries
                 .FirstOrDefaultAsync(ace =>
@@ -42,7 +42,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> HasPermissionAsync(Guid userId, Guid permissionResourceTypeId, PermissionEnum permission)
+        public async Task<bool> HasPermissionAsync(string userId, Guid permissionResourceTypeId, PermissionEnum permission)
         {
             return await _context.AccessControlEntries
                   .Where(ace => ace.UserId == userId &&

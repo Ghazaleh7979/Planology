@@ -14,14 +14,13 @@ namespace Application.UseCases.User
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> ExecuteAsync(Guid userId, UserDto input)
+        public async Task<bool> ExecuteAsync(string userId, UserDto input)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 return false;
 
-            _userRepository.Update(user);
-            await _unitOfWork.SaveChangesAsync();
+            await _userRepository.UpdateAsync(user);
             return true;
         }
     }
