@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Application.DTOs;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 
 namespace API.DependencyInjection
 {
@@ -13,6 +15,18 @@ namespace API.DependencyInjection
                     Title = "Planology",
                     Version = "v1",
                     Description = "Authentication and UserMnagement"
+                });
+
+                c.EnableAnnotations();
+
+                c.MapType<LoginDto>(() => new OpenApiSchema
+                {
+                    Type = "object",
+                    Properties =
+                    {
+                        ["email"] = new OpenApiSchema { Type = "string", Example = new OpenApiString("ghazalehhh137999@gmail.com.com") },
+                        ["password"] = new OpenApiSchema { Type = "string", Example = new OpenApiString("Ghaza@7979") }
+                    }
                 });
                 var securitySchema = new OpenApiSecurityScheme
                 {

@@ -1,5 +1,7 @@
 using API.DependencyInjection;
+using API.Middlewares;
 using Domain.Entities;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddFluentValidationAutoValidation();
+
 
 var app = builder.Build();
 
@@ -37,8 +41,9 @@ if (app.Environment.IsDevelopment())
         });
     }
 }
-
+app.UseGlobalExceptionHandler();
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
