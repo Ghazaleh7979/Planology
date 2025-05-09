@@ -2,7 +2,6 @@
 using Application.Events;
 using Domain.Entities;
 using MassTransit;
-using MassTransit.Transports;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -73,14 +72,14 @@ namespace API.Controllers
 
             if (user == null)
             {
-                return Unauthorized(new { Message = "Invalid credentials" });
+                return Unauthorized(new { Message = "ایمیل معتبر نیست" });
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded)
             {
-                return Unauthorized(new { Message = "Invalid credentials" });
+                return Unauthorized(new { Message = "رمز عبور اشتباه است" });
             }
 
             var roles = await _userManager.GetRolesAsync(user);

@@ -1,14 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
 
 namespace Application.DTOs
 {
     public class LoginDto
     {
-        [Required]
-        [EmailAddress]
+        [SwaggerSchema("ghazalehhh137999@gmail.com")]
         public string Email { get; set; }
 
-        [Required]
+        [SwaggerSchema("Ghaza@7979")]
         public string Password { get; set; }
     }
 }
