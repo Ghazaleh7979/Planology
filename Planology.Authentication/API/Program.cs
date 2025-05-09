@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.IRepository;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ builder.Services.AddControllers()
             options.JsonSerializerOptions.PropertyNamingPolicy = null;
         });
 
+#region Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -34,6 +36,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
 });
+#endregion
 #region Repositories
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -57,6 +60,7 @@ builder.Services.AddScoped<DeleteUserUseCase>();
 builder.Services.AddScoped<JwtSettings>();
 
 builder.Services.AddOpenApi();
+#region Jwt
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.AddAuthentication(options =>
 {
@@ -76,6 +80,8 @@ builder.Services.AddAuthentication(options =>
                 Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
         };
     });
+#endregion
+#region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -108,6 +114,21 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityRequirement(securityRequirement);
 });
+#endregion
+#region MassTransit
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+    });
+});
+#endregion
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -135,5 +156,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

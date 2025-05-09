@@ -1,5 +1,8 @@
 ﻿using Application.DTOs;
+using Application.Events;
 using Domain.Entities;
+using MassTransit;
+using MassTransit.Transports;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -16,15 +19,18 @@ namespace API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IPublishEndpoint publishEndpoint)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpPost("register-admin")]
@@ -79,7 +85,7 @@ namespace API.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = GenerateJwtToken(user, roles);
-
+            await _publishEndpoint.Publish(new UserLoggedInEvent(user.Id, user.Email!, DateTime.UtcNow));
             return Ok(new
             {
                 Token = token,
