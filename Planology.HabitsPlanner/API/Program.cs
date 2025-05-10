@@ -1,5 +1,4 @@
 using API.DependencyInjection;
-using API.Middlewares;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddMongoDB(builder.Configuration);
 
 
 var app = builder.Build();
@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
         });
     }
 }
-app.UseGlobalExceptionHandler();
+//app.UseGlobalExceptionHandler();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
