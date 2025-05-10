@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Your Name",
+  "identity": "Planology.Template",
+  "name": "Planology Template",
+  "shortName": "planotemp",
+  "sourceName": "Planology.Authentication",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}
