@@ -1,0 +1,3 @@
+dotnet new planotemp -n Planology.BookPlanner
+cd Planology.BookPlanner
+dotnet build
