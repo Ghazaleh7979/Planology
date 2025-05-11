@@ -24,7 +24,11 @@
     <Folder Include="Events\" />
     <Folder Include="Extensions\" />
     <Folder Include="Requests\" />
-    <Folder Include="UseCases\" />
+    <Folder Include="UseCases\Habits\" />
+    <Folder Include="UseCases\Goals\" />
+    <Folder Include="UseCases\MeasurementUnits\" />
+    <Folder Include="UseCases\AnalysisAndReporting\" />
+    <Folder Include="UseCases\Notification\" />
   </ItemGroup>
 
 </Project>
