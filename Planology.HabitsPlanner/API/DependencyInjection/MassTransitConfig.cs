@@ -1,4 +1,6 @@
-﻿using MassTransit;
+﻿using Application.Helper;
+using Infrastructure.Consumer;
+using MassTransit;
 
 namespace API.DependencyInjection
 {
@@ -6,14 +8,17 @@ namespace API.DependencyInjection
     {
         public static IServiceCollection AddMassTransitWithRabbitMq(this IServiceCollection services)
         {
-            services.AddMassTransit(x =>
+            services.AddSingleton<UserSessionStore>();
+            services.AddMassTransit(cfg =>
             {
-                x.UsingRabbitMq((context, cfg) =>
+                cfg.AddConsumer<UserLoggedInConsumer>();
+                cfg.UsingRabbitMq((ctx, cfgRabbit) =>
                 {
-                    cfg.Host("localhost", "/", h =>
+                    cfgRabbit.Host("rabbitmq://localhost");
+                    cfgRabbit.ReceiveEndpoint("auth-events", ep =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        ep.ConfigureConsumer<UserLoggedInConsumer>(ctx);
+                        ep.ConfigureConsumer<UserLoggedOutConsumer>(ctx);
                     });
                 });
             });

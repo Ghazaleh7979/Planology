@@ -1,7 +1,8 @@
-﻿namespace Domain.Entities.HabitModels
+﻿namespace Application.Requests
 {
-    public class HabitLog
+    public class LogHabitRequest
     {
+        public string HabitId { get; set; }
         public DateTime Date { get; set; }
         public bool Completed { get; set; }
         public int? Amount { get; set; }
