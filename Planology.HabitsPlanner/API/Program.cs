@@ -1,4 +1,5 @@
 using API.DependencyInjection;
+using API.Middlewares;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +38,9 @@ if (app.Environment.IsDevelopment())
         });
     }
 }
-//app.UseGlobalExceptionHandler();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<AuthenticationMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();

@@ -12,6 +12,7 @@ namespace API.DependencyInjection
             services.AddMassTransit(cfg =>
             {
                 cfg.AddConsumer<UserLoggedInConsumer>();
+                cfg.AddConsumer<UserLoggedOutConsumer>();
                 cfg.UsingRabbitMq((ctx, cfgRabbit) =>
                 {
                     cfgRabbit.Host("rabbitmq://localhost");
