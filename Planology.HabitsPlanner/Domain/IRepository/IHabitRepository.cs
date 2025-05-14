@@ -12,5 +12,6 @@ namespace Domain.IRepository
         Task AddLogAsync(string habitId, HabitLog log);
         Task<List<HabitLog>> GetLogsAsync(string habitId, DateTime from, DateTime to);
         Task<int> GetCurrentStreakAsync(string habitId);
+        Task ReplaceLogAsync(string id, HabitLog existingLog);
     }
 }

@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.4.0" />
-    <Compile Remove="Identity\**" />
     <Compile Remove="Migrations\**" />
-    <EmbeddedResource Remove="Identity\**" />
     <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Identity\**" />
     <None Remove="Migrations\**" />
   </ItemGroup>
 

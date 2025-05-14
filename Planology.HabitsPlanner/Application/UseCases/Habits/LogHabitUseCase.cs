@@ -14,29 +14,55 @@ namespace Application.UseCases.Habits
         private readonly UserSessionStore _sessionStore;
         private readonly IMeasurementUnitRepository _unitRepo;
 
-        public LogHabitUseCase()
+        public LogHabitUseCase(
+            IHabitRepository habitRepo,
+            ICurrentUserService currentUser,
+            UserSessionStore sessionStore,
+            IMeasurementUnitRepository unitRepo)
         {
-
+            _habitRepo = habitRepo;
+            _currentUser = currentUser;
+            _sessionStore = sessionStore;
+            _unitRepo = unitRepo;
         }
         public async Task ExecuteAsync(LogHabitRequest request)
         {
             var userId = _currentUser.GetCurrentUserId();
             _currentUser.CheckUserLoggedIn(_sessionStore);
 
-            if (request.MeasurementUnitId != null && request.Amount == null)
-                throw new Exception("لطفا برای واحد مقدار وارد کنید");
+            var habit = await _habitRepo.GetByIdAsync(request.HabitId);
+            if (habit == null || habit.UserId != userId)
+                throw new UnauthorizedAccessException("You don't have access to this habit.");
 
-            if (request.MeasurementUnitId != null && await _unitRepo.GetByIdAsync(request.MeasurementUnitId!) == null)
-                throw new Exception("واحد وارد شده وجود ندارد");
+            var today = DateTime.UtcNow.Date;
+
+            var existingLog = habit.Logs.FirstOrDefault(l => l.Date == today);
+            if (existingLog != null)
+            {
+                existingLog.Completed = request.Completed;
+                existingLog.Amount = request.Amount;
+                existingLog.MeasurementUnitId = request.MeasurementUnitId;
+
+                await _habitRepo.ReplaceLogAsync(habit.Id, existingLog);
+                return;
+            }
+
+            if (request.Amount.HasValue && !string.IsNullOrWhiteSpace(request.MeasurementUnitId))
+            {
+                var isValidUnit = await _unitRepo.ExistsAsync(request.MeasurementUnitId);
+                if (!isValidUnit)
+                    throw new ArgumentException("Invalid unit.");
+            }
 
             var log = new HabitLog
             {
+                Date = today,
                 Completed = request.Completed,
-                Date = DateTime.UtcNow,
                 Amount = request.Amount,
-                MeasurementUnitId = request.MeasurementUnitId,
+                MeasurementUnitId = request.MeasurementUnitId
             };
-            await _habitRepo.AddLogAsync(request.HabitId, log);
+
+            await _habitRepo.AddLogAsync(habit.Id, log);
         }
     }
 }

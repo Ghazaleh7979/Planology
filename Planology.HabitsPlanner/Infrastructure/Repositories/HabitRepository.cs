@@ -78,4 +78,16 @@ public class HabitRepository : IHabitRepository
 
         return streak;
     }
+    public async Task ReplaceLogAsync(string habitId, HabitLog updatedLog)
+    {
+        var filter = Builders<Habit>.Filter.And(
+            Builders<Habit>.Filter.Eq(h => h.Id, habitId),
+            Builders<Habit>.Filter.ElemMatch(h => h.Logs, l => l.Date == updatedLog.Date)
+        );
+
+        var update = Builders<Habit>.Update
+            .Set("Logs.$.Completed", updatedLog.Completed);
+
+        await _collection.UpdateOneAsync(filter, update);
+    }
 }
