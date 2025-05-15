@@ -84,7 +84,7 @@ namespace API.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = GenerateJwtToken(user, roles);
-            await _publishEndpoint.Publish(new UserLoggedInEvent(user.Id, user.Email!, DateTime.UtcNow));
+            await _publishEndpoint.Publish(new UserLoggedInEvent(user.Id, user.Email!, DateTime.UtcNow, true));
             return Ok(new
             {
                 Token = token,

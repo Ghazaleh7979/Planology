@@ -1,7 +1,8 @@
-﻿using Application.Extensions;
+﻿using Application.DTOs;
+using Application.Extensions;
 using Application.Helper;
 using Application.Interfaces;
-using Domain.Entities.HabitModels;
+using Application.Mapper;
 using Domain.IRepository;
 
 namespace Application.UseCases.Habits
@@ -22,12 +23,13 @@ namespace Application.UseCases.Habits
             _sessionStore = sessionStore;
         }
 
-        public async Task<List<Habit>> ExecuteAsync()
+        public async Task<List<HabitDto>> ExecuteAsync()
         {
             var userId = _currentUser.GetCurrentUserId();
             _currentUser.CheckUserLoggedIn(_sessionStore);
 
-            return await _habitRepo.GetByUserIdAsync(userId);
+            var habits = await _habitRepo.GetByUserIdAsync(userId);
+            return habits.Select(h => h.ToHabitDto()).ToList();
         }
     }
 }
