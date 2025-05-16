@@ -10,9 +10,9 @@ namespace API.DependencyInjection
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
             services.AddScoped<HabitService>();
-            services.AddScoped<UserSessionStore>();
+            services.AddSingleton<UserSessionStore>();
             services.AddHttpContextAccessor();
-            services.AddScoped<ICurrentUserService, HttpContextCurrentUserService>();
+            services.AddSingleton<ICurrentUserService, HttpContextCurrentUserService>();
 
             services.AddScoped<CheckHabitUseCase>();
             services.AddScoped<CreateHabitUseCase>();

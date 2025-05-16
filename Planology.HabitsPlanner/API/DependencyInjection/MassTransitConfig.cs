@@ -15,12 +15,15 @@ namespace API.DependencyInjection
                 cfg.AddConsumer<UserLoggedOutConsumer>();
                 cfg.UsingRabbitMq((ctx, cfgRabbit) =>
                 {
-                    cfgRabbit.Host("localhost", "/", h => {
+                    cfgRabbit.Host("localhost", "/", h =>
+                    {
                         h.Username("guest");
                         h.Password("guest");
-                    }); cfgRabbit.ReceiveEndpoint("auth-events", ep =>
+                    });
+                    cfgRabbit.ReceiveEndpoint("auth-events", ep =>
                     {
                         ep.ConfigureConsumer<UserLoggedInConsumer>(ctx);
+                        ep.Bind("user-logged-in");
                         ep.ConfigureConsumer<UserLoggedOutConsumer>(ctx);
                     });
                 });
