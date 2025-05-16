@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Application.Events;
+using MassTransit;
 
 namespace API.DependencyInjection
 {
@@ -15,6 +16,7 @@ namespace API.DependencyInjection
                         h.Username("guest");
                         h.Password("guest");
                     });
+                    cfg.Message<UserLoggedInEvent>(x => x.SetEntityName("user-logged-in"));
                 });
             });
             return services;
