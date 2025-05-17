@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddRepositories();
 builder.Services.AddUseCases();
 builder.Services.AddOpenApi();
+builder.Services.AddJwtValidation(builder.Configuration);
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddFluentValidationAutoValidation();
@@ -24,7 +25,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    var url = "https://localhost:7009/swagger/index.html";
+    var url = "https://localhost:7010/swagger/index.html";
     try
     {
         System.Diagnostics.Process.Start("chrome", url);
@@ -38,8 +39,7 @@ if (app.Environment.IsDevelopment())
         });
     }
 }
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<AuthenticationMiddleware>();
+app.UseMiddleware<JwtValidationMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseRouting();
