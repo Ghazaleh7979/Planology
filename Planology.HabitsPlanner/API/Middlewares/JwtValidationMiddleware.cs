@@ -13,12 +13,12 @@ namespace API.Middlewares
         public JwtValidationMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
-            _secret = configuration["JwtSettings:Secret"];
+            _secret = configuration["JwtSettings:SecretKey"];
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
 
             if (string.IsNullOrWhiteSpace(token))
             {
