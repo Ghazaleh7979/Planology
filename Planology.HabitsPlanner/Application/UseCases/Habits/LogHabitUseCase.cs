@@ -1,5 +1,4 @@
 ﻿using Application.Extensions;
-using Application.Helper;
 using Application.Interfaces;
 using Application.Requests;
 using Domain.Entities.HabitModels;
@@ -11,24 +10,20 @@ namespace Application.UseCases.Habits
     {
         private readonly IHabitRepository _habitRepo;
         private readonly ICurrentUserService _currentUser;
-        private readonly UserSessionStore _sessionStore;
         private readonly IMeasurementUnitRepository _unitRepo;
 
         public LogHabitUseCase(
             IHabitRepository habitRepo,
             ICurrentUserService currentUser,
-            UserSessionStore sessionStore,
             IMeasurementUnitRepository unitRepo)
         {
             _habitRepo = habitRepo;
             _currentUser = currentUser;
-            _sessionStore = sessionStore;
             _unitRepo = unitRepo;
         }
         public async Task ExecuteAsync(LogHabitRequest request)
         {
             var userId = _currentUser.GetCurrentUserId();
-            _currentUser.CheckUserLoggedIn(_sessionStore);
 
             var habit = await _habitRepo.GetByIdAsync(request.HabitId);
             if (habit == null || habit.UserId != userId)

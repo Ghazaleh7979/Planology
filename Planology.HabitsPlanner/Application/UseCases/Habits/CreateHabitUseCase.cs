@@ -1,5 +1,4 @@
 ﻿using Application.Extensions;
-using Application.Helper;
 using Application.Interfaces;
 using Application.Requests;
 using Domain.Entities.HabitModels;
@@ -11,12 +10,10 @@ namespace Application.UseCases.Habits
     public class CreateHabitUseCase
     {
         private readonly IHabitRepository _habitRepo;
-        private readonly UserSessionStore _sessionStore;
         private readonly ICurrentUserService _currentUser;
-        public CreateHabitUseCase(IHabitRepository habitRepo, UserSessionStore sessionStore, ICurrentUserService currentUser)
+        public CreateHabitUseCase(IHabitRepository habitRepo, ICurrentUserService currentUser)
         {
             _habitRepo = habitRepo;
-            _sessionStore = sessionStore;
             _currentUser = currentUser;
         }
         public async Task ExecuteAsync(CreateHabitRequest request)
@@ -25,8 +22,7 @@ namespace Application.UseCases.Habits
                 throw new ArgumentException("Habit name is required.");
 
             var userId = _currentUser.GetCurrentUserId();
-            _currentUser.CheckUserLoggedIn(_sessionStore);
-            
+
             switch (request.HabitTimingEnum)
             {
                 case HabitTiming.EveryDay:

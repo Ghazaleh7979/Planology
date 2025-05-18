@@ -1,5 +1,4 @@
-﻿using Application.Helper;
-using Infrastructure.Consumer;
+﻿using Infrastructure.Consumer;
 using MassTransit;
 
 namespace API.DependencyInjection
@@ -8,7 +7,6 @@ namespace API.DependencyInjection
     {
         public static IServiceCollection AddMassTransitWithRabbitMq(this IServiceCollection services)
         {
-            services.AddSingleton<UserSessionStore>();
             services.AddMassTransit(cfg =>
             {
                 cfg.AddConsumer<UserLoggedInConsumer>();

@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.UseCases.Habits;
 using Infrastructure.Identity;
+using Infrastructure.SignalR;
 
 namespace API.DependencyInjection
 {
@@ -10,9 +11,9 @@ namespace API.DependencyInjection
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
             services.AddScoped<HabitService>();
-            services.AddSingleton<UserSessionStore>();
             services.AddHttpContextAccessor();
-            services.AddSingleton<ICurrentUserService, HttpContextCurrentUserService>();
+            services.AddScoped<ICurrentUserService, HttpContextCurrentUserService>();
+            services.AddScoped<IMessageService, NotificationMessageService>();
 
             services.AddScoped<CheckHabitUseCase>();
             services.AddScoped<CreateHabitUseCase>();
