@@ -1,6 +1,7 @@
 using API.DependencyInjection;
 using API.Middlewares;
 using FluentValidation.AspNetCore;
+using Infrastructure.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddSwaggerWithJwt();
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddMongoDB(builder.Configuration);
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -45,6 +46,6 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapHub<NotificationHub>("/notificationhub");
 app.MapControllers();
 app.Run();

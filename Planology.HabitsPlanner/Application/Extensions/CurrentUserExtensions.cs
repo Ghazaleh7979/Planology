@@ -1,5 +1,4 @@
-﻿using Application.Helper;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 
 namespace Application.Extensions
 {
@@ -11,13 +10,6 @@ namespace Application.Extensions
             if (string.IsNullOrWhiteSpace(userId))
                 throw new UnauthorizedAccessException("User ID not found in token.");
             return userId;
-        }
-
-        public static void CheckUserLoggedIn(this ICurrentUserService currentUser, UserSessionStore session)
-        {
-            var userId = currentUser.GetCurrentUserId();
-            if (!session.IsLoggedIn(userId))
-                throw new UnauthorizedAccessException("User is not logged in.");
         }
     }
 
