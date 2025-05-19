@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Infrastructure.Identity
 {
@@ -13,7 +14,7 @@ namespace Infrastructure.Identity
         }
 
         public string? UserId =>
-            _accessor.HttpContext?.User?.FindFirst("sub")?.Value
+            _accessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
             ?? _accessor.HttpContext?.User?.FindFirst("user_id")?.Value;
     }
 }

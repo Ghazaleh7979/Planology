@@ -1,8 +1,4 @@
-﻿using Application.Helper;
-using Application.Interfaces;
-using Application.UseCases.Habits;
-using Infrastructure.Identity;
-using Infrastructure.SignalR;
+﻿using Application.UseCases.Habits;
 
 namespace API.DependencyInjection
 {
@@ -10,11 +6,6 @@ namespace API.DependencyInjection
     {
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
-            services.AddScoped<HabitService>();
-            services.AddHttpContextAccessor();
-            services.AddScoped<ICurrentUserService, HttpContextCurrentUserService>();
-            services.AddScoped<IMessageService, NotificationMessageService>();
-
             services.AddScoped<CheckHabitUseCase>();
             services.AddScoped<CreateHabitUseCase>();
             services.AddScoped<DeleteHabitUseCase>();
@@ -22,6 +13,7 @@ namespace API.DependencyInjection
             services.AddScoped<GetUserHabitsUseCase>();
             services.AddScoped<LogHabitUseCase>();
             services.AddScoped<UpdateHabitUseCase>();
+
             return services;
         }
     }
