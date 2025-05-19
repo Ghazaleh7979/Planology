@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddRepositories();
 builder.Services.AddUseCases();
+builder.Services.AddServices();
 builder.Services.AddOpenApi();
 builder.Services.AddJwtValidation(builder.Configuration);
 builder.Services.AddSwaggerWithJwt();
@@ -26,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    var url = "https://localhost:7010/swagger/index.html";
+    var url = "http://localhost:7010/swagger/index.html";
     try
     {
         System.Diagnostics.Process.Start("chrome", url);
