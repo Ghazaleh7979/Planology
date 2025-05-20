@@ -1,3 +1,4 @@
+using Planology.PlannerSelectorService.Features.GetAvailablePlanners;
 using Planology.PlannerSelectorService.Features.SelectPlanner;
 using StackExchange.Redis;
 
@@ -10,7 +11,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis") ?? "localhost"));
 
 var app = builder.Build();
+
 SelectPlannerEndpoint.Map(app);
+GetAvailablePlannersEndpoint.Map(app);
+GetCurrentPlannerEndpoint.Map(app);
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

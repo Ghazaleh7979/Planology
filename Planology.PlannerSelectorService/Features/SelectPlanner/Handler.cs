@@ -26,7 +26,7 @@ public static class SelectPlannerEndpoint
 
             // connect redis
             var db = redis.GetDatabase();
-            await db.StringSetAsync($"user:{userId}", cmd.PlannerType, TimeSpan.FromHours(5));
+            await db.StringSetAsync($"user:{userId}:selected_planner", cmd.PlannerType, TimeSpan.FromHours(5));
 
             // event
             PlannerSelected.Raise(userId, cmd.PlannerType);
