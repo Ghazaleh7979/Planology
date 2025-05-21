@@ -1,16 +1,20 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/habits/{everything}",
+      "DownstreamPathTemplate": "/planner/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7010
+          "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/habits/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamPathTemplate": "/planner/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ],
   "GlobalConfiguration": {
