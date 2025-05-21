@@ -8,7 +8,7 @@ namespace Planology.PlannerSelectorService.Features.GetAvailablePlanners
     {
         public static void Map(WebApplication app)
         {
-            app.MapGet("/planners", async (
+            app.MapGet("/planner/Available", async (
                 HttpContext context,
                 IConnectionMultiplexer redis) =>
             {
